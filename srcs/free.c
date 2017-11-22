@@ -6,7 +6,7 @@
 /*   By: amoinier <amoinier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/21 12:07:41 by amoinier          #+#    #+#             */
-/*   Updated: 2017/11/21 12:22:37 by amoinier         ###   ########.fr       */
+/*   Updated: 2017/11/22 15:22:54 by amoinier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,6 @@
 
 void 		free(void *ptr)
 {
-
+	ptr = (void *)ptr;
 	return ;
 }

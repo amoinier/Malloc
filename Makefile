@@ -6,7 +6,7 @@
 #    By: amoinier <amoinier@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/12/07 12:02:38 by amoinier          #+#    #+#              #
-#    Updated: 2017/11/21 12:48:00 by amoinier         ###   ########.fr        #
+#    Updated: 2017/11/22 15:26:12 by amoinier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ ODIR =		./objs/
 OBJS =		$(SRCS:.c=.o)
 OBCC =		$(addprefix $(ODIR),$(OBJS))
 
-FLAG =		-I$(IDIR)
+FLAG =		-g -Wall -Werror -Wextra -I$(IDIR)
 
 all: $(NAME)
 
