@@ -6,16 +6,16 @@
 /*   By: amoinier <amoinier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/21 12:06:54 by amoinier          #+#    #+#             */
-/*   Updated: 2017/11/23 11:46:34 by amoinier         ###   ########.fr       */
+/*   Updated: 2017/11/23 16:02:49 by amoinier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 
 t_page 	g_pages_array[3] = {
-	{'1', NULL, NULL, NULL},
-	{'1', NULL, NULL, NULL},
-	{'1', NULL, NULL, NULL}
+	{0, '1', NULL, NULL, NULL},
+	{0, '1', NULL, NULL, NULL},
+	{0, '1', NULL, NULL, NULL}
 };
 
 static int 		init_global(size_t size)
@@ -26,6 +26,7 @@ static int 		init_global(size_t size)
 	if (!g_pages_array[page_type].mem)
 	{
 		printf("CREATE - mem\n");
+		printf("%d\n", get_page_size(size));
 		if (!(g_pages_array[page_type].mem = alloc_mmap(get_page_size(size))))
 			return (-1);
 	}
@@ -35,10 +36,9 @@ static int 		init_global(size_t size)
 		g_pages_array[page_type].init = g_pages_array[page_type].mem;
 		g_pages_array[page_type].init->free = '1';
 		g_pages_array[page_type].init->size = 0;
-		g_pages_array[page_type].init->mem = (void *)(g_pages_array[page_type].init + sizeof(*g_pages_array[page_type].init));
-		g_pages_array[page_type].init->space = get_page_size(size) - sizeof(*g_pages_array[page_type].init);
+		g_pages_array[page_type].init->mem = (void *)g_pages_array[page_type].init + sizeof(t_header);
+		g_pages_array[page_type].init->space = get_page_size(size) - sizeof(t_header);
 		g_pages_array[page_type].init->next = NULL;
-		printf("! MEMORY TEST ! %zu %zu %zu ! MEMORY TEST\n", sizeof(&g_pages_array[page_type].init), sizeof(g_pages_array[page_type].init), sizeof(*g_pages_array[page_type].init));
 		printf("CREATE - Init - Free Space = %d\n", g_pages_array[page_type].init->space);
 	}
 
@@ -51,7 +51,8 @@ static t_header *findPlace(t_page *pages, size_t size)
 	t_header	*tmp;
 
 	i = 0;
-	if (pages->space_left == '0')
+	printf("--- PAGES MAX SIZE = %d %lu ---\n", pages->max_space_size, (size + sizeof(t_header)));
+	if (pages->space_left == '0' || (double)(pages->max_space_size - (size + sizeof(t_header))) <= 0)
 	{
 		if (!pages->next)
 		{
@@ -79,10 +80,11 @@ static t_header *findPlace(t_page *pages, size_t size)
 				if (tmp->free == '1' && size <= (tmp->size + tmp->space))
 				{
 					printf("FINDPLACE - Space and free block\n");
-					printf("Space left - %d %d %zu\n", tmp->space, tmp->size, size);
+					tmp->free = '0';
 					tmp->space = (tmp->space + tmp->size) - size;
 					tmp->size = size;
-					tmp->free = '0';
+					if (pages->max_space_size != 0)
+						pages->max_space_size = (pages->max_space_size <= tmp->space ? tmp->space : pages->max_space_size);
 					printf("Space left - %d\n", tmp->space);
 					return (tmp);
 				}
@@ -91,11 +93,12 @@ static t_header *findPlace(t_page *pages, size_t size)
 					break ;
 				tmp = tmp->next;
 			}
-			printf("FINDPLACE - Space and no free block\n");
+			printf("FINDPLACE - (%d) Space and no free block\n", i);
 			printf("WESH %u - %zu - %d\n", tmp->space, size, (int)(tmp->space - size));
 			if ((int)(tmp->space - size) <= 0)
 			{
 				printf("i == BLOCK_NBR\n");
+				pages->max_space_size = tmp->space;
 				pages->space_left = '0';
 				return findPlace(pages, size);
 			}
@@ -103,8 +106,8 @@ static t_header *findPlace(t_page *pages, size_t size)
 			{
 				printf("i != BLOCK_NBR\n");
 				printf("Space left - %d\n", tmp->space);
-				init_new_block(tmp, size);
-				printf("X Space left - %d %d %zu\n", tmp->space, tmp->next->space, size);
+				init_new_block(pages, tmp, size);
+				printf("X Space left - %d\n", tmp->next->space);
 				return (tmp->next);
 			}
 		}
