@@ -6,7 +6,7 @@
 /*   By: amoinier <amoinier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/21 12:06:06 by amoinier          #+#    #+#             */
-/*   Updated: 2017/11/22 19:52:36 by amoinier         ###   ########.fr       */
+/*   Updated: 2017/11/23 11:49:03 by amoinier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,15 @@ int 		main(void)
 	printf("%lu\n", sizeof(int));
 	printf("%lu --\n", sizeof(char));
 
-	for (int i = 0; i < 150; i++)
+	for (int i = 0; i < 101; i++)
 	{
-		text = malloc(40);
+		text = malloc(47);
 		text[0] = 'S';
 		text[1] = 'A';
 		text[2] = 'L';
 		text[3] = 'U';
+		printf("%s + %d\n", text, (i + 1));
 		printf("-----\n");
-		printf("%s + %d\n", text, i);
 	}
 
 	return (0);

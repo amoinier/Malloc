@@ -6,7 +6,7 @@
 /*   By: amoinier <amoinier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/21 12:06:54 by amoinier          #+#    #+#             */
-/*   Updated: 2017/11/22 20:17:56 by amoinier         ###   ########.fr       */
+/*   Updated: 2017/11/23 11:46:34 by amoinier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ static t_header *findPlace(t_page *pages, size_t size)
 		{
 			printf("FINDPLACE - Space, Init exist\n");
 			tmp = pages->init;
-			printf("Start While\n");
+			printf("FINDPLACE - Start While\n");
 			while (tmp)
 			{
 				if (tmp->free == '1' && size <= (tmp->size + tmp->space))
@@ -92,7 +92,8 @@ static t_header *findPlace(t_page *pages, size_t size)
 				tmp = tmp->next;
 			}
 			printf("FINDPLACE - Space and no free block\n");
-			if ((double)(tmp->space - size) >= 0)
+			printf("WESH %u - %zu - %d\n", tmp->space, size, (int)(tmp->space - size));
+			if ((int)(tmp->space - size) <= 0)
 			{
 				printf("i == BLOCK_NBR\n");
 				pages->space_left = '0';
@@ -118,8 +119,6 @@ void 		*malloc(size_t size)
 {
 	int 	page_type;
 	t_header	*test;
-
-	printf("%zu SIZE TINY %zu\n", get_page_size(size), sizeof(t_header));
 
 	page_type = init_global(size);
 	test = findPlace(&g_pages_array[page_type], size);
