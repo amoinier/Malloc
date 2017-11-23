@@ -6,7 +6,7 @@
 /*   By: amoinier <amoinier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/21 12:06:06 by amoinier          #+#    #+#             */
-/*   Updated: 2017/11/23 16:00:34 by amoinier         ###   ########.fr       */
+/*   Updated: 2017/11/23 19:13:18 by amoinier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,10 @@ int 		main(void)
 	printf("%lu --\n", sizeof(t_header));
 	printf("%lu --\n", sizeof(t_page));
 
-	for (int i = 0; i < 10000; i++)
+	for (int i = 0; i < 1; i++)
 	{
-		text = malloc(49);
+		if (!(text = malloc(4000000000)))
+			return (0);
 		text[0] = 'S';
 		text[1] = 'A';
 		text[2] = 'L';

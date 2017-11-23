@@ -6,7 +6,7 @@
 /*   By: amoinier <amoinier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/21 11:59:20 by amoinier          #+#    #+#             */
-/*   Updated: 2017/11/23 15:46:08 by amoinier         ###   ########.fr       */
+/*   Updated: 2017/11/23 18:01:01 by amoinier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ typedef struct 		s_header {
 
 typedef struct 		s_page {
 	unsigned int 	max_space_size;
-	char 			space_left;
 	void 			*mem;
 	struct s_page	*next;
 	t_header		*init;
@@ -53,7 +52,6 @@ void 				*init_new_page(t_page *pages, size_t size);
 void 				*alloc_mmap(size_t size);
 
 unsigned int		get_page_size(size_t size);
-unsigned int 		get_block_size(size_t size);
 int					get_page_type(size_t size);
 
 

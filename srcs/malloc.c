@@ -6,16 +6,16 @@
 /*   By: amoinier <amoinier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/21 12:06:54 by amoinier          #+#    #+#             */
-/*   Updated: 2017/11/23 16:02:49 by amoinier         ###   ########.fr       */
+/*   Updated: 2017/11/23 19:11:31 by amoinier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 
 t_page 	g_pages_array[3] = {
-	{0, '1', NULL, NULL, NULL},
-	{0, '1', NULL, NULL, NULL},
-	{0, '1', NULL, NULL, NULL}
+	{0, NULL, NULL, NULL},
+	{0, NULL, NULL, NULL},
+	{0, NULL, NULL, NULL}
 };
 
 static int 		init_global(size_t size)
@@ -32,13 +32,15 @@ static int 		init_global(size_t size)
 	}
 	if (!g_pages_array[page_type].init)
 	{
-		printf("CREATE - Init\n");
+		printf("CREATE - Init - %d\n", get_page_size(size));
 		g_pages_array[page_type].init = g_pages_array[page_type].mem;
 		g_pages_array[page_type].init->free = '1';
 		g_pages_array[page_type].init->size = 0;
 		g_pages_array[page_type].init->mem = (void *)g_pages_array[page_type].init + sizeof(t_header);
 		g_pages_array[page_type].init->space = get_page_size(size) - sizeof(t_header);
 		g_pages_array[page_type].init->next = NULL;
+
+		g_pages_array[page_type].max_space_size = g_pages_array[page_type].init->space;
 		printf("CREATE - Init - Free Space = %d\n", g_pages_array[page_type].init->space);
 	}
 
@@ -47,12 +49,10 @@ static int 		init_global(size_t size)
 
 static t_header *findPlace(t_page *pages, size_t size)
 {
-	int 		i;
 	t_header	*tmp;
 
-	i = 0;
-	printf("--- PAGES MAX SIZE = %d %lu ---\n", pages->max_space_size, (size + sizeof(t_header)));
-	if (pages->space_left == '0' || (double)(pages->max_space_size - (size + sizeof(t_header))) <= 0)
+	printf("--- PAGES MAX SIZE = %d, result = %d ---\n", pages->max_space_size, (int)(pages->max_space_size - (size + sizeof(t_header))));
+	if ((int)(pages->max_space_size - (size + sizeof(t_header))) < 0)
 	{
 		if (!pages->next)
 		{
@@ -73,46 +73,40 @@ static t_header *findPlace(t_page *pages, size_t size)
 		if (pages->init)
 		{
 			printf("FINDPLACE - Space, Init exist\n");
-			tmp = pages->init;
 			printf("FINDPLACE - Start While\n");
+			ft_putstr("1\n");
+			tmp = pages->init;
+			printf("!! CHECK VALUE !! -\nget_page_size() = %d\nsize = %zu\npages->max_space_size = %d\n- !! CHECK VALUE !!",
+			get_page_size(size), size, pages->max_space_size);
 			while (tmp)
 			{
+				ft_putstr("2\n");
+				printf("!! CHECK VALUE !! tmp->free = %d tmp->space = %d tmp->size = %d !! CHECK VALUE !!\n", tmp->free, tmp->space, tmp->size);
 				if (tmp->free == '1' && size <= (tmp->size + tmp->space))
 				{
+					ft_putstr("3\n");
 					printf("FINDPLACE - Space and free block\n");
 					tmp->free = '0';
 					tmp->space = (tmp->space + tmp->size) - size;
 					tmp->size = size;
-					if (pages->max_space_size != 0)
-						pages->max_space_size = (pages->max_space_size <= tmp->space ? tmp->space : pages->max_space_size);
+					pages->max_space_size = tmp->space;
 					printf("Space left - %d\n", tmp->space);
 					return (tmp);
 				}
-				i++;
-				if (!tmp->next)
-					break ;
+				else if ((int)(tmp->space - (size + sizeof(t_header))) >= 0)
+				{
+					ft_putstr("4\n");
+					init_new_block(pages, tmp, size);
+					return (tmp->next);
+				}
 				tmp = tmp->next;
 			}
-			printf("FINDPLACE - (%d) Space and no free block\n", i);
-			printf("WESH %u - %zu - %d\n", tmp->space, size, (int)(tmp->space - size));
-			if ((int)(tmp->space - size) <= 0)
-			{
-				printf("i == BLOCK_NBR\n");
-				pages->max_space_size = tmp->space;
-				pages->space_left = '0';
-				return findPlace(pages, size);
-			}
-			else
-			{
-				printf("i != BLOCK_NBR\n");
-				printf("Space left - %d\n", tmp->space);
-				init_new_block(pages, tmp, size);
-				printf("X Space left - %d\n", tmp->next->space);
-				return (tmp->next);
-			}
+			ft_putstr("5\n");
+			return (NULL);
 		}
 		else
 		{
+			ft_putstr("6\n");
 			return (NULL);
 		}
 	}
@@ -124,7 +118,9 @@ void 		*malloc(size_t size)
 	t_header	*test;
 
 	page_type = init_global(size);
+	if (page_type == -1)
+		return (NULL);
 	test = findPlace(&g_pages_array[page_type], size);
 
-	return (test->mem);
+	return ((test ? test->mem : test));
 }
