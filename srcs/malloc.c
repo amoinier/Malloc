@@ -34,8 +34,8 @@ static int 		init_global(size_t size)
 	{
 		printf("CREATE - Init - %ld\n", get_page_size(size));
 		g_pages_array[page_type].init = (t_header *)g_pages_array[page_type].mem;
-		g_pages_array[page_type].init->free = '1';
 		g_pages_array[page_type].init->size = 0;
+		g_pages_array[page_type].init->page = &g_pages_array[page_type];
 		g_pages_array[page_type].init->mem = (void *)g_pages_array[page_type].init + sizeof(t_header);
 		g_pages_array[page_type].init->space = get_page_size(size) - sizeof(t_header);
 		g_pages_array[page_type].init->next = NULL;
@@ -74,19 +74,12 @@ static t_header *findPlace(t_page *pages, size_t size)
 		{
 			printf("FINDPLACE - Space, Init exist\n");
 			printf("FINDPLACE - Start While\n");
-			ft_putstr("1\n");
 			tmp = pages->init;
-			printf("!! CHECK VALUE !! -\nget_page_size() = %ld\nsize = %zu\npages->max_space_size = %ld\n- !! CHECK VALUE !!",
-			get_page_size(size), size, pages->max_space_size);
 			while (tmp)
 			{
-				ft_putstr("2\n");
-				printf("!! CHECK VALUE !! tmp->free = %d tmp->space = %ld tmp->size = %ld !! CHECK VALUE !!\n", tmp->free, tmp->space, tmp->size);
-				if (tmp->free == '1' && size <= (tmp->size + tmp->space))
+				if (tmp->size == 0 && size <= (tmp->size + tmp->space))
 				{
-					ft_putstr("3\n");
 					printf("FINDPLACE - Space and free block\n");
-					tmp->free = '0';
 					tmp->space = (tmp->space + tmp->size) - size;
 					tmp->size = size;
 					pages->max_space_size = tmp->space;
@@ -95,20 +88,15 @@ static t_header *findPlace(t_page *pages, size_t size)
 				}
 				else if ((int)(tmp->space - (size + sizeof(t_header))) >= 0)
 				{
-					ft_putstr("4\n");
 					init_new_block(pages, tmp, size);
 					return (tmp->next);
 				}
 				tmp = tmp->next;
 			}
-			ft_putstr("5\n");
 			return (NULL);
 		}
 		else
-		{
-			ft_putstr("6\n");
 			return (NULL);
-		}
 	}
 }
 

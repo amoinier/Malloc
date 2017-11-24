@@ -26,7 +26,7 @@ int 		main(void)
 
 	for (int i = 0; i < 101; i++)
 	{
-		if (!(text = mallocs(830000000))) {
+		if (!(text = mallocs(10))) {
 			ft_putstr("FUCK YOU\n");
 			return (0);
 		}
@@ -37,8 +37,12 @@ int 		main(void)
 		text[4] = 'T';
 		text[5] = '\0';
 		printf("%s + %d\n", text, (i + 1));
+		// if (i % 2 == 0)
+		// 	free(text);
 		printf("-----\n");
 	}
+
+	show_alloc_mem();
 
 	return (0);
 }

@@ -27,10 +27,10 @@
 # define 	SMALL_SIZE 	(SMALL - (sizeof(t_header) * BLOCK_NBR)) / BLOCK_NBR
 
 typedef struct 		s_header {
-	char 			free;
 	size_t			size;
 	size_t			space;
 	void 			*mem;
+	struct s_page	*page;
 	struct s_header	*next;
 } 					t_header;
 
@@ -53,6 +53,11 @@ void 				*alloc_mmap(size_t size);
 
 size_t				get_page_size(size_t size);
 int					get_page_type(size_t size);
+
+void				print_memory(const void *addr, size_t size);
+void 				show_alloc_mem();
+
+
 
 
 #endif

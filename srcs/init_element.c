@@ -24,7 +24,7 @@ void 		init_new_block(t_page *pages, t_header *header, size_t size)
 	header->next->space = (!tmp ? header->space - sizeof(t_header) - size : tmp->space);
 	header->next->next = tmp;
 	header->next->size = size;
-	header->next->free = '0';
+	header->next->page = pages;
 	header->space = 0;
 	pages->max_space_size = header->next->space;
 }
@@ -40,8 +40,8 @@ void 		*init_new_page(t_page *pages, size_t size)
 		pages->next->next = NULL;
 		pages->next->init = (t_header *)(pages->next->mem);
 
-		pages->next->init->free = '1';
 		pages->next->init->size = 0;
+		pages->next->init->page = pages;
 		pages->next->init->space = get_page_size(size) - sizeof(t_page);
 		pages->next->init->mem = (void *)pages->init + sizeof(t_header);
 		pages->next->init->next = NULL;
