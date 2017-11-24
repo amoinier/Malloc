@@ -28,15 +28,15 @@
 
 typedef struct 		s_header {
 	char 			free;
-	unsigned int	size;
-	unsigned int	space;
+	size_t			size;
+	size_t			space;
 	void 			*mem;
 	struct s_header	*next;
 } 					t_header;
 
 
 typedef struct 		s_page {
-	unsigned int 	max_space_size;
+	size_t		 	max_space_size;
 	void 			*mem;
 	struct s_page	*next;
 	t_header		*init;
@@ -51,7 +51,7 @@ void 				*init_new_page(t_page *pages, size_t size);
 
 void 				*alloc_mmap(size_t size);
 
-unsigned int		get_page_size(size_t size);
+size_t				get_page_size(size_t size);
 int					get_page_type(size_t size);
 
 

@@ -12,20 +12,18 @@
 
 #include "malloc.h"
 
-unsigned int 	get_page_size(size_t size)
+size_t 	get_page_size(size_t size)
 {
-	unsigned int i;
+	size_t i;
 
-	i = 1;
 	if (size <= TINY_SIZE)
 		return ((int)TINY);
 	else if (size <= SMALL_SIZE)
 		return ((int)SMALL);
 	else
 	{
-		while ((size_t)(getpagesize() * i) < size + sizeof(t_page) + sizeof(t_header))
-			i++;
-		printf("TEST %d %lu %lu %lu TEST\n", getpagesize() * i, size, sizeof(t_page), sizeof(t_header));
+		i = ((size + sizeof(t_page) + sizeof(t_header)) / (getpagesize())) + 1;
+		printf("TEST %ld %lu %lu %u TEST\n", getpagesize() * i, size, (size + sizeof(t_page) + sizeof(t_header)) / getpagesize(), getpagesize());
 		return (getpagesize() * i);
 	}
 }

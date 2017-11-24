@@ -26,8 +26,10 @@ int 		main(void)
 
 	for (int i = 0; i < 101; i++)
 	{
-		if (!(text = malloc(10)))
+		if (!(text = mallocs(830000000))) {
+			ft_putstr("FUCK YOU\n");
 			return (0);
+		}
 		text[0] = 'S';
 		text[1] = 'A';
 		text[2] = 'L';
