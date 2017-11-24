@@ -24,14 +24,16 @@ int 		main(void)
 	printf("%lu --\n", sizeof(t_header));
 	printf("%lu --\n", sizeof(t_page));
 
-	for (int i = 0; i < 1; i++)
+	for (int i = 0; i < 101; i++)
 	{
-		if (!(text = malloc(4000000000)))
+		if (!(text = malloc(10)))
 			return (0);
 		text[0] = 'S';
 		text[1] = 'A';
 		text[2] = 'L';
 		text[3] = 'U';
+		text[4] = 'T';
+		text[5] = '\0';
 		printf("%s + %d\n", text, (i + 1));
 		printf("-----\n");
 	}

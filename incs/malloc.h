@@ -43,7 +43,7 @@ typedef struct 		s_page {
 } 					t_page;
 
 void 				free(void *ptr);
-void 				*malloc(size_t size);
+void 				*mallocs(size_t size);
 void 				*realloc(void *ptr, size_t size);
 
 void 				init_new_block(t_page *pages, t_header *header, size_t size);

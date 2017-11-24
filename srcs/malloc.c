@@ -112,7 +112,7 @@ static t_header *findPlace(t_page *pages, size_t size)
 	}
 }
 
-void 		*malloc(size_t size)
+void 		*mallocs(size_t size)
 {
 	int 	page_type;
 	t_header	*test;
