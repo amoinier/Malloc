@@ -24,9 +24,9 @@ int 		main(void)
 	printf("%lu --\n", sizeof(t_header));
 	printf("%lu --\n", sizeof(t_page));
 
-	for (int i = 0; i < 101; i++)
+	for (int i = 0; i < 201; i++)
 	{
-		if (!(text = mallocs(10))) {
+		if (!(text = mallocs(40))) {
 			ft_putstr("FUCK YOU\n");
 			return (0);
 		}
@@ -35,7 +35,8 @@ int 		main(void)
 		text[2] = 'L';
 		text[3] = 'U';
 		text[4] = 'T';
-		text[5] = '\0';
+		text[5] = 48 + (i % 9);
+		text[6] = '\0';
 		printf("%s + %d\n", text, (i + 1));
 		// if (i % 2 == 0)
 		// 	free(text);

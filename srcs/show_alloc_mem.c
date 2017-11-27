@@ -42,8 +42,10 @@ void 		show_alloc_mem()
 				print_memory(tmp_header->mem, tmp_header->size);
 				tmp_header = tmp_header->next;
 			}
+			ft_putstr("XXX\n");
 			tmp_page = tmp_page->next;
 			j++;
 		}
+		i++;
 	}
 }
