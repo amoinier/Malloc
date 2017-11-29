@@ -15,26 +15,37 @@
 static char 	*change_base(intptr_t addr, int base)
 {
 	char 	char_base[16] = "0123456789ABCDEF";
-	char 	result[16];
-	int 	i;
+	char 	*result;
+	int 	tmp;
 	int 	j;
 
-	i = 0;
 	j = 2;
-	result[0] = "0";
-	result[1] = "x";
+	result[0] = '0';
+	result[1] = 'x';
+	tmp = 0;
+	if (!(result = (char *)malloc(sizeof(char) * 19)))
+		return (NULL);
 	while (addr != 0)
 	{
-		if (addr < 15)
-		{
-			result[j];
-		}
+		tmp = addr % base;
+		result[j] = char_base[tmp];
+		addr /= base;
 		j++;
 	}
+	result[j] = '\0';
+	j = 0;
+	// while (j < ft_strlen(result))
+	// {
+    //
+	// }
+
+	printf("- %s\n", result);
+	return (NULL);
 }
 
 void	print_memory(const void *addr, size_t size)
 {
+	change_base((intptr_t)addr, 16);
 	printf("ADDR: %p(%ld) - size: %zu\n", addr, (intptr_t)addr, size);
 	return ;
 }
