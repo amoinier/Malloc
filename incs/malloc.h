@@ -54,7 +54,7 @@ void 				*alloc_mmap(size_t size);
 size_t				get_page_size(size_t size);
 int					get_page_type(size_t size);
 
-void				print_memory(const void *addr, size_t size);
+void				print_memory(const void *addr);
 void 				show_alloc_mem();
 
 

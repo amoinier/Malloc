@@ -14,7 +14,8 @@
 
 void 		*realloc(void *ptr, size_t size)
 {
-	ptr = (void *)ptr;
-	size = size * 1;
+	t_header *header;
+
+	header = (t_header *)(ptr - sizeof(t_header));
 	return NULL;
 }

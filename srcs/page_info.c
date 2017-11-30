@@ -23,7 +23,6 @@ size_t 	get_page_size(size_t size)
 	else
 	{
 		i = ((size + sizeof(t_page) + sizeof(t_header)) / (getpagesize())) + 1;
-		printf("TEST %ld %lu %lu %u TEST\n", getpagesize() * i, size, (size + sizeof(t_page) + sizeof(t_header)) / getpagesize(), getpagesize());
 		return (getpagesize() * i);
 	}
 }

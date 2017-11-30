@@ -25,14 +25,11 @@ static int 		init_global(size_t size)
 	page_type = get_page_type(size);
 	if (!g_pages_array[page_type].mem)
 	{
-		printf("CREATE - mem\n");
-		printf("get_page_size %ld\n", get_page_size(size));
 		if (!(g_pages_array[page_type].mem = alloc_mmap(get_page_size(size))) || g_pages_array[page_type].mem == MAP_FAILED)
 			return (-1);
 	}
 	if (!g_pages_array[page_type].init)
 	{
-		printf("CREATE - Init - %ld\n", get_page_size(size));
 		g_pages_array[page_type].init = (t_header *)g_pages_array[page_type].mem;
 		g_pages_array[page_type].init->size = 0;
 		g_pages_array[page_type].init->page = &g_pages_array[page_type];
@@ -41,7 +38,6 @@ static int 		init_global(size_t size)
 		g_pages_array[page_type].init->next = NULL;
 
 		g_pages_array[page_type].max_space_size = g_pages_array[page_type].init->space;
-		printf("CREATE - Init - Free Space = %ld\n", g_pages_array[page_type].init->space);
 	}
 
 	return (page_type);
@@ -51,12 +47,10 @@ static t_header *findPlace(t_page *pages, size_t size)
 {
 	t_header	*tmp;
 
-	printf("--- PAGES MAX SIZE = %ld, result = %ld ---\n", pages->max_space_size, (pages->max_space_size - (size + sizeof(t_header))));
 	if ((pages->max_space_size < (size + sizeof(t_header))))
 	{
 		if (!pages->next)
 		{
-			printf("FINDPLACE - No space, try to create new page\n");
 			if (init_new_page(pages, size))
 				return (findPlace(pages->next, size));
 			else
@@ -64,7 +58,6 @@ static t_header *findPlace(t_page *pages, size_t size)
 		}
 		else
 		{
-			//printf("FINDPLACE - No space, go to next page\n");
 			return (findPlace(pages->next, size));
 		}
 	}
@@ -72,18 +65,14 @@ static t_header *findPlace(t_page *pages, size_t size)
 	{
 		if (pages->init)
 		{
-			printf("FINDPLACE - Space, Init exist\n");
-			printf("FINDPLACE - Start While\n");
 			tmp = pages->init;
 			while (tmp)
 			{
 				if (tmp->size == 0 && size <= (tmp->size + tmp->space))
 				{
-					printf("FINDPLACE - Space and free block\n");
 					tmp->space = (tmp->space + tmp->size) - size;
 					tmp->size = size;
 					pages->max_space_size = tmp->space;
-					printf("Space left - %ld\n", tmp->space);
 					return (tmp);
 				}
 				else if ((int)(tmp->space - (size + sizeof(t_header))) >= 0)

@@ -19,7 +19,6 @@ static t_header 	*find_prev_header(t_page *page, t_header *block)
 	t_header	*tmp;
 
 	tmp = page->init;
-	printf("getPrev - %ld\n", tmp->space);
 	while(tmp && tmp->next != block && tmp != block)
 		tmp = tmp->next;
 	return (tmp);
@@ -31,7 +30,6 @@ void 				free(void *ptr)
 	t_header *prev;
 
 	header = (t_header *)(ptr - sizeof(t_header));
-	printf("START CHECK pointer - %p\n", header);
 	prev = find_prev_header(header->page, header);
 	if (prev)
 	{
@@ -40,7 +38,6 @@ void 				free(void *ptr)
 			prev->next = header->next;
 			prev->space += sizeof(t_header) + header->size + header->space;
 			header->page->max_space_size = (header->page->max_space_size < prev->space ? prev->space : header->page->max_space_size);
-			printf("CHECK pointer - %p\n", header);
 			ft_bzero(header, sizeof(t_header) + header->size);
 		}
 		else
@@ -49,13 +46,8 @@ void 				free(void *ptr)
 			header->page->max_space_size += header->size;
 			ft_bzero(header->mem, header->size);
 			header->size = 0;
-			printf("CHECK pointer - %p\n", header);
 		}
 
-	}
-	else
-	{
-		printf("Can't find prev\n");
 	}
 	return ;
 }

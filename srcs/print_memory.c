@@ -12,6 +12,24 @@
 
 #include "malloc.h"
 
+static char 	*reverse_string(char *str)
+{
+	char	tmp;
+	int 	j;
+	int 	size;
+
+	j = 0;
+	size = ft_strlen(str) - 1;
+	while (str[j * 2])
+	{
+		tmp = str[j];
+		str[j] = str[size - j];
+		str[size - j] = tmp;
+		j++;
+	}
+	return (str);
+}
+
 static char 	*change_base(intptr_t addr, int base)
 {
 	char 	char_base[16] = "0123456789ABCDEF";
@@ -19,11 +37,9 @@ static char 	*change_base(intptr_t addr, int base)
 	int 	tmp;
 	int 	j;
 
-	j = 2;
-	result[0] = '0';
-	result[1] = 'x';
+	j = 0;
 	tmp = 0;
-	if (!(result = (char *)malloc(sizeof(char) * 19)))
+	if (!(result = (char *)mallocs(sizeof(char) * 17)))
 		return (NULL);
 	while (addr != 0)
 	{
@@ -33,19 +49,17 @@ static char 	*change_base(intptr_t addr, int base)
 		j++;
 	}
 	result[j] = '\0';
-	j = 0;
-	// while (j < ft_strlen(result))
-	// {
-    //
-	// }
-
-	printf("- %s\n", result);
-	return (NULL);
+	result = reverse_string(result);
+	return (result);
 }
 
-void	print_memory(const void *addr, size_t size)
+void	print_memory(const void *addr)
 {
-	change_base((intptr_t)addr, 16);
-	printf("ADDR: %p(%ld) - size: %zu\n", addr, (intptr_t)addr, size);
+	char *str_addr;
+
+	str_addr = change_base((intptr_t)addr, 16);
+	ft_putstr("0x");
+	ft_putstr(str_addr);
+	free(str_addr);
 	return ;
 }

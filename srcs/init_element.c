@@ -16,8 +16,6 @@ void 		init_new_block(t_page *pages, t_header *header, size_t size)
 {
 	t_header 	*tmp;
 
-	printf("XXX %ld - %zu - %zu XXX\n", header->space, sizeof(*header->next), size);
-
 	tmp = header->next;
 	header->next = (t_header *)(header->mem + header->size);
 	header->next->mem = (void *)header->next + sizeof(t_header);
@@ -45,7 +43,6 @@ void 		*init_new_page(t_page *pages, size_t size)
 		pages->next->init->space = get_page_size(size) - sizeof(t_page);
 		pages->next->init->mem = (void *)pages->init + sizeof(t_header);
 		pages->next->init->next = NULL;
-		printf("** %ld - %lu - %lu - %ld - %ld **\n", get_page_size(size), sizeof(t_page), sizeof(t_header), pages->next->init->space, pages->next->max_space_size);
 		return (pages);
 	}
 }
