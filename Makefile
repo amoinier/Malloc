@@ -10,113 +10,62 @@
 #                                                                              #
 # **************************************************************************** #
 
-EXEC = malloc
-
-DEBUG = no
-CC = gcc
-OS := $(shell uname -s)
-
 ifeq ($(HOSTTYPE),)
-HOSTTYPE := $(shell uname -m)_$(shell uname -s)
+	HOSTTYPE := $(shell uname -m)_$(shell uname -s)
 endif
 
-ifeq ($(DEBUG), yes)
-	CFLAGS = -Wall -Werror -Wextra -std=c99 -pedantic -g -ggdb
-else
-	CFLAGS =  -Wall -Werror -Wextra
-endif
+NAME = libft_malloc_$(HOSTTYPE).so
 
-LIBFT_PATH = ./libft
-LIBFT_FILE = $(LIBFT_PATH)/libft.a
-LIBFT_DEP = $(LIBFT_PATH)/*
+CC = gcc
 
-# Link lib : "-L FOLDER -lXXX" where XXX = libXXX.a
+LIB = libft/libft.a
 
-ifeq ($(OS), Linux)
-	LFLAGS = -L./libft -lft
-	INCLUDE = -I./incs -I./libft/includes
-else
-	LFLAGS = -L./libft -lft
-	INCLUDE = -I./incs -I./libft/includes
-endif
+CFLAGS = -Wall -Wextra -Werror
 
-OUT_DIR = objs
-SRC_DIR = srcs
-INC_DIR = incs
+SRC = ft_malloc.c \
+	  ft_print_tabs.c \
+	  ft_manage_tiny.c \
+	  ft_manage_small.c \
+	  ft_manage_large.c \
+	  ft_free_tiny.c \
+	  ft_free_small.c \
+	  ft_free_large.c \
+	  ft_free.c \
+	  ft_realloc.c
 
-SDIR =		./srcs/
-SRCS =		$(notdir $(shell ls srcs/*.c))
-SRCC =		$(addprefix $(SDIR),$(SRCS))
+OBJ = $(srcs/SRC:.c=.o)
 
-ODIR =		./objs/
-OBJS =		$(SRCS:.c=.o)
-OBCC =		$(addprefix $(ODIR),$(OBJS))
+.PHONY: all libft clean fclean re
 
-all: directories $(EXEC)
+all : libft $(NAME)
 
-$(LIBFT_FILE): $(LIBFT_DEP)
-ifeq ($(OS), Linux)
-	@echo -e "\x1B[34mLibft:\x1B[0m"
-else
-	@echo "\x1B[34mLibft:\x1B[0m"
-endif
-	@make -C ./libft
+$(NAME):  $(OBJ)
+	@$(CC) -shared -o $(NAME) $(OBJ) $(LIB)
+	@ln -s $(NAME) libft_malloc.so
+	@echo "!"
+	@echo "$(NAME) compiled\033[0m"
 
-$(EXEC): $(OBCC) $(LIBFT_FILE)
-ifeq ($(OS), Linux)
-	@echo -e "\x1B[34m$(EXEC):\x1B[0m"
-	@$(CC) $(CFLAGS) -o $@ $(OBCC) $(INCLUDE) $(LFLAGS)
-	@echo -e "\x1b[36m  + Compile program:\x1B[0m $@"
-else
-	@echo "\x1B[34m$(EXEC):\x1B[0m"
-	@$(CC) $(CFLAGS) -o $@ $(OBCC) $(INCLUDE) $(LFLAGS)
-	@echo "\x1b[36m  + Compile program:\x1B[0m $@"
-	@echo "\x1B[31m\c"
-	@norminette srcs/* incs/* | grep -B 1 "Error" || true
-	@echo "\x1B[0m\c"
-endif
+libft :
+	@make -C libft/
 
-$(ODIR)%.o: $(SDIR)%.c
-	@$(CC) $^ $(CFLAGS) -c -o $@ $(INCLUDE)
-ifeq ($(OS), Linux)
-	@echo -e "\r\x1B[32m  + Compile:\x1B[0m $(notdir $^)"
-else
-	@echo "\r\x1B[32m  + Compile:\x1B[0m $(notdir $^)"
-endif
+%.o : %.c
+	@$(CC) -c $(CFLAGS) -I./incs/ -I./libft/includes $<
+	@printf "\033[32m."
 
-directories: ${OUT_DIR} ${SRC_DIR} ${INC_DIR}
+clean :
+	@make -C libft/ clean
+	@/bin/rm -f $(OBJ)
+	@/bin/rm -f libft_malloc.so
+	@echo "\033[31m$(NAME) objects deleted\033[0m"
 
-${OUT_DIR}:
-	@mkdir -p ${OUT_DIR}
+fclean : allclean
+	@/bin/rm -f $(NAME)
+	@echo "\033[31m$(NAME) deleted\033[0m"
 
-${SRC_DIR}:
-	@mkdir -p ${SRC_DIR}
+allclean :
+	@make -C libft/ fclean
+	@/bin/rm -f libft_malloc.so
+	@/bin/rm -f $(OBJ)
+	@echo "\033[31m$(NAME) objects deleted\033[0m"
 
-${INC_DIR}:
-	@mkdir -p ${INC_DIR}
-
-clean:
-	@make -C ./libft clean
-	@rm -rf $(OUT_DIR)
-ifeq ($(OS), Linux)
-	@echo -e "\x1B[31m  - Remove:\x1B[0m $(EXEC) objs"
-else
-	@echo "\x1B[31m  - Remove:\x1B[0m $(EXEC) objs"
-endif
-
-fclean: clean
-	@make -C ./libft fclean
-	@rm -f $(EXEC)
-ifeq ($(OS), Linux)
-	@echo -e "\x1B[31m  - Remove:\x1B[0m $(EXEC)"
-else
-	@echo "\x1B[31m  - Remove:\x1B[0m $(EXEC)"
-endif
-
-re: fclean
-	@make
-
-run: re
-	@./$(EXEC)
-
-.PHONY: all clean fclean re run directories norm
+re : fclean all
