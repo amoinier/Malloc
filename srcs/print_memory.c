@@ -39,7 +39,7 @@ static char 	*change_base(intptr_t addr, int base)
 
 	j = 0;
 	tmp = 0;
-	if (!(result = (char *)mallocs(sizeof(char) * 17)))
+	if (!(result = (char *)malloc(sizeof(char) * 17)))
 		return (NULL);
 	while (addr != 0)
 	{

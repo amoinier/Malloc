@@ -33,7 +33,7 @@ static int 		init_global(size_t size)
 		g_pages_array[page_type].init = (t_header *)g_pages_array[page_type].mem;
 		g_pages_array[page_type].init->size = 0;
 		g_pages_array[page_type].init->page = &g_pages_array[page_type];
-		g_pages_array[page_type].init->mem = (void *)g_pages_array[page_type].init + sizeof(t_header);
+		g_pages_array[page_type].init->mem = ((void *)g_pages_array[page_type].init + sizeof(t_header));
 		g_pages_array[page_type].init->space = get_page_size(size) - sizeof(t_header);
 		g_pages_array[page_type].init->next = NULL;
 
@@ -57,9 +57,7 @@ static t_header *findPlace(t_page *pages, size_t size)
 				return (NULL);
 		}
 		else
-		{
 			return (findPlace(pages->next, size));
-		}
 	}
 	else
 	{
@@ -89,7 +87,7 @@ static t_header *findPlace(t_page *pages, size_t size)
 	}
 }
 
-void 		*mallocs(size_t size)
+void 		*malloc(size_t size)
 {
 	int 	page_type;
 	t_header	*test;

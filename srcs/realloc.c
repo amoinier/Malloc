@@ -14,8 +14,11 @@
 
 void 		*realloc(void *ptr, size_t size)
 {
-	t_header *header;
+	void 		*dest;
 
-	header = (t_header *)(ptr - sizeof(t_header));
-	return NULL;
+	if (!(dest = malloc(sizeof(void) * (size + 1))))
+		return (NULL);
+	ft_memcpy(dest, ptr, size);
+	free(ptr);
+	return (dest);
 }
