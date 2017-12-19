@@ -18,7 +18,8 @@ void		*realloc(void *ptr, size_t size)
 
 	if (!(dest = malloc(sizeof(void) * (size + 1))))
 		return (NULL);
-	ft_memcpy(dest, ptr, size);
-	free(ptr);
+	dest = ft_memcpy(dest, ptr, size);
+	if (ptr != dest)
+		free(ptr);
 	return (dest);
 }
