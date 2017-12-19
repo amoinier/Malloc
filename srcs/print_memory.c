@@ -12,11 +12,11 @@
 
 #include "malloc.h"
 
-static char 	*reverse_string(char *str)
+static char		*reverse_string(char *str)
 {
-	char	tmp;
-	int 	j;
-	int 	size;
+	char		tmp;
+	int			j;
+	int			size;
 
 	j = 0;
 	size = ft_strlen(str) - 1;
@@ -30,13 +30,14 @@ static char 	*reverse_string(char *str)
 	return (str);
 }
 
-static char 	*change_base(intptr_t addr, int base)
+static char		*change_base(intptr_t addr, int base)
 {
-	char 	char_base[16] = "0123456789ABCDEF";
-	char 	*result;
-	int 	tmp;
-	int 	j;
+	char		char_base[16];
+	char		*result;
+	int			tmp;
+	int			j;
 
+	char_base = "0123456789ABCDEF";
 	j = 0;
 	tmp = 0;
 	if (!(result = (char *)malloc(sizeof(char) * 17)))
@@ -53,9 +54,9 @@ static char 	*change_base(intptr_t addr, int base)
 	return (result);
 }
 
-void	print_memory(const void *addr)
+void			print_memory(const void *addr)
 {
-	char *str_addr;
+	char		*str_addr;
 
 	str_addr = change_base((intptr_t)addr, 16);
 	ft_putstr("0x");

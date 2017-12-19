@@ -12,11 +12,11 @@
 
 #include "malloc.h"
 
-void 		*alloc_mmap(size_t size)
+void		*alloc_mmap(size_t size)
 {
-	void 	*tmp;
+	void	*tmp;
 
 	tmp = (void *)mmap(NULL, size, PROT_READ | PROT_WRITE,
 		MAP_ANON | MAP_PRIVATE, -1, 0);
-	return tmp;
+	return (tmp);
 }

@@ -42,8 +42,7 @@ all : libft $(NAME)
 $(NAME):  $(OBJ)
 	@$(CC) -shared -o $(NAME) $(OBJ) $(LIB)
 	@ln -s $(NAME) libft_malloc.so
-	@echo "!"
-	@echo "$(NAME) compiled\033[0m"
+	@echo "$(NAME) compiled !\033[0m"
 
 libft :
 	@make -C libft/

@@ -12,7 +12,7 @@
 
 #include "malloc.h"
 
-size_t 	get_page_size(size_t size)
+size_t	get_page_size(size_t size)
 {
 	size_t i;
 
