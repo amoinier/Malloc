@@ -57,7 +57,7 @@ static t_header	*no_size_cond(t_page *pages, size_t size)
 		return (find_place(pages->next, size));
 }
 
-static t_header	*size_cond(t_page *pages, sized_t size)
+static t_header	*size_cond(t_page *pages, size_t size)
 {
 	t_header	*tmp;
 
@@ -86,7 +86,7 @@ static t_header	*size_cond(t_page *pages, sized_t size)
 		return (NULL);
 }
 
-static t_header	*find_place(t_page *pages, size_t size)
+t_header		*find_place(t_page *pages, size_t size)
 {
 	if ((pages->max_space_size < (size + sizeof(t_header))))
 		return (no_size_cond(pages, size));

@@ -32,12 +32,11 @@ static char		*reverse_string(char *str)
 
 static char		*change_base(intptr_t addr, int base)
 {
-	char		char_base[16];
+	char const	*char_base = "0123456789abcdef";
 	char		*result;
 	int			tmp;
 	int			j;
 
-	char_base = "0123456789ABCDEF";
 	j = 0;
 	tmp = 0;
 	if (!(result = (char *)malloc(sizeof(char) * 17)))

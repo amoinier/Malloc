@@ -14,57 +14,54 @@ ifeq ($(HOSTTYPE),)
 	HOSTTYPE := $(shell uname -m)_$(shell uname -s)
 endif
 
-NAME = libft_malloc_$(HOSTTYPE).so
+NAME =			libft_malloc_$(HOSTTYPE).so
 
-CC = gcc
+LINK =			libft_malloc.so
 
-LIB = libft/libft.a
+CC =			gcc
 
-CFLAGS = -Wall -Wextra -Werror
+FLAGS =			-Wall -Werror -Wextra -fPIC
 
-SRC = ft_malloc.c \
-	  ft_print_tabs.c \
-	  ft_manage_tiny.c \
-	  ft_manage_small.c \
-	  ft_manage_large.c \
-	  ft_free_tiny.c \
-	  ft_free_small.c \
-	  ft_free_large.c \
-	  ft_free.c \
-	  ft_realloc.c
+HEADERS =		-I ./incs -I $(LIBFT_DIR)
 
-OBJ = $(srcs/SRC:.c=.o)
+LIBRARIES =		-L$(LIBFT_DIR) -l$(LIBFT_NAME)
 
-.PHONY: all libft clean fclean re
+LIBFT_NAME =	ft
 
-all : libft $(NAME)
+LIBFT =			$(LIBFT_DIR)lib$(LIBFT_NAME).a
 
-$(NAME):  $(OBJ)
-	@$(CC) -shared -o $(NAME) $(OBJ) $(LIB)
-	@ln -s $(NAME) libft_malloc.so
-	@echo "$(NAME) compiled !\033[0m"
+LIBFT_DIR =		./libft/
 
-libft :
-	@make -C libft/
+SRC_DIR =		./srcs/
 
-%.o : %.c
-	@$(CC) -c $(CFLAGS) -I./incs/ -I./libft/includes $<
-	@printf "\033[32m."
+OBJ_DIR_NAME =	obj
+OBJ_DIR =		./obj/
 
-clean :
-	@make -C libft/ clean
-	@/bin/rm -f $(OBJ)
-	@/bin/rm -f libft_malloc.so
-	@echo "\033[31m$(NAME) objects deleted\033[0m"
+FILENAMES =		free malloc realloc show_alloc_mem alloc_mmap init_element page_info print_memory
 
-fclean : allclean
-	@/bin/rm -f $(NAME)
-	@echo "\033[31m$(NAME) deleted\033[0m"
+OBJ_PATHS :=	$(addsuffix .o,$(FILENAMES))
+OBJ_PATHS :=	$(addprefix $(OBJ_DIR),$(OBJ_PATHS))
 
-allclean :
-	@make -C libft/ fclean
-	@/bin/rm -f libft_malloc.so
-	@/bin/rm -f $(OBJ)
-	@echo "\033[31m$(NAME) objects deleted\033[0m"
+all: $(NAME)
 
-re : fclean all
+$(NAME): $(LIBFT) $(OBJ_PATHS)
+	$(CC) $(OBJ_PATHS) $(HEADERS) $(LIBRARIES) -shared -o $(NAME)
+	@/bin/rm -f $(LINK)
+	ln -s $(NAME) $(LINK)
+
+$(OBJ_PATHS): $(OBJ_DIR)%.o: $(SRC_DIR)%.c
+	@/bin/mkdir -p $(OBJ_DIR)
+	$(CC) -c $(FLAGS) $(HEADERS) $< -o $@
+
+$(LIBFT):
+	(cd $(LIBFT_DIR) && make)
+
+clean:
+	-/bin/rm -f $(OBJ_PATHS)
+	(cd $(LIBFT_DIR) && make fclean)
+	/usr/bin/find . -name "$(OBJ_DIR_NAME)" -maxdepth 1 -type d -empty -delete
+
+fclean: clean
+	-/bin/rm -f $(NAME) $(LINK)
+
+re: fclean all

@@ -44,12 +44,13 @@ typedef struct		s_page {
 void				free(void *ptr);
 void				*malloc(size_t size);
 void				*realloc(void *ptr, size_t size);
+void				show_alloc_mem();
+t_header			*find_place(t_page *pages, size_t size);
 void				init_new_block(t_page *page, t_header *header, size_t size);
 void				*init_new_page(t_page *pages, size_t size);
 void				*alloc_mmap(size_t size);
 size_t				get_page_size(size_t size);
 int					get_page_type(size_t size);
 void				print_memory(const void *addr);
-void				show_alloc_mem();
 
 #endif
