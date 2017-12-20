@@ -53,8 +53,9 @@ static t_header	*no_size_cond(t_page *pages, size_t size)
 		else
 			return (NULL);
 	}
-	else
+	else {
 		return (find_place(pages->next, size));
+	}
 }
 
 static t_header	*size_cond(t_page *pages, size_t size)
@@ -88,10 +89,18 @@ static t_header	*size_cond(t_page *pages, size_t size)
 
 t_header		*find_place(t_page *pages, size_t size)
 {
+	t_header	*tmp;
+
 	if ((pages->max_space_size < (size + sizeof(t_header))))
-		return (no_size_cond(pages, size));
+	{
+		tmp = no_size_cond(pages, size);
+		return (tmp);
+	}
 	else
-		return (size_cond(pages, size));
+	{
+		tmp = size_cond(pages, size);
+		return (tmp);
+	}
 }
 
 void			*malloc(size_t size)

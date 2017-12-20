@@ -14,12 +14,22 @@
 
 void		*realloc(void *ptr, size_t size)
 {
-	void	*dest;
+	void		*dest;
+	t_header 	*header;
 
-	if (!(dest = malloc(sizeof(void) * (size + 1))))
+	header = (t_header *)(ptr - sizeof(t_header));
+	if (!header || !header->mem || !header->page)
 		return (NULL);
-	dest = ft_memcpy(dest, ptr, size);
-	if (ptr != dest)
-		free(ptr);
+	if (header->size + header->space < size)
+	{
+		if (!(dest = (void *)malloc(size + 1)))
+			return (NULL);
+		dest = memcpy(dest, ptr, header->size);
+		if (ptr != dest)
+			free(ptr);
+	}
+	else
+		dest = ptr;
+
 	return (dest);
 }

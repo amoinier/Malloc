@@ -29,7 +29,11 @@ void				free(void *ptr)
 	t_header		*header;
 	t_header		*prev;
 
+	if (!ptr)
+		return ;
 	header = (t_header *)(ptr - sizeof(t_header));
+	if (!header || !header->mem || !header->page)
+		return ;
 	prev = find_prev_header(header->page, header);
 	if (prev)
 	{

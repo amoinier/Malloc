@@ -30,27 +30,33 @@ static unsigned int	second_loop(t_page *tmp_page, unsigned int total, int j)
 	t_header		*tmp_header;
 
 	tmp_header = tmp_page->init;
-	ft_putstr("PAGE ");
+	ft_putstr("*** PAGE ");
 	ft_putnbr(j);
-	ft_putchar('\n');
+	ft_putstr(" ***\n");
 	while (tmp_header)
 	{
 		print_header(tmp_header);
 		total += tmp_header->size;
 		tmp_header = tmp_header->next;
 	}
+	ft_putstr("**************\n");
 	return (total);
 }
 
-static unsigned int	first_loop(char *page_nam[3], unsigned int total, int i)
+static unsigned int	first_loop(char *page_name[3], unsigned int total, int i)
 {
 	t_page			*tmp_page;
 	int				j;
 
-	ft_putstr(page_nam[i]);
-	print_memory((void *)page_nam[i]);
-	ft_putchar('\n');
 	tmp_page = &g_pages_array[i];
+	if (!tmp_page->mem)
+	{
+		return (total);
+	}
+	ft_putstr("--------------\n");
+	ft_putstr(page_name[i]);
+	print_memory(tmp_page->mem);
+	ft_putchar('\n');
 	j = 0;
 	while (tmp_page)
 	{
@@ -63,6 +69,7 @@ static unsigned int	first_loop(char *page_nam[3], unsigned int total, int i)
 
 static void			print_total(unsigned total)
 {
+	ft_putstr("--------------\n");
 	ft_putstr("Total : ");
 	ft_putnbr(total);
 	ft_putstr(" octets\n");

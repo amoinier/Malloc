@@ -58,8 +58,13 @@ void			print_memory(const void *addr)
 	char		*str_addr;
 
 	str_addr = change_base((intptr_t)addr, 16);
-	ft_putstr("0x");
-	ft_putstr(str_addr);
+	if (ft_strlen(str_addr) > 0)
+	{
+		ft_putstr("0x");
+		ft_putstr(str_addr);
+	}
+	else
+		ft_putstr("0");
 	free(str_addr);
 	return ;
 }
