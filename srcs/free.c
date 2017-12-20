@@ -24,15 +24,24 @@ static	t_header	*find_prev_header(t_page *page, t_header *block)
 	return (tmp);
 }
 
+static t_header		*check_before_free(void *ptr)
+{
+	t_header		*header;
+
+	if (!ptr)
+		return (NULL);
+	header = (t_header *)(ptr - sizeof(t_header));
+	if (!header || !header->mem || !header->page)
+		return (NULL);
+	return (header);
+}
+
 void				free(void *ptr)
 {
 	t_header		*header;
 	t_header		*prev;
 
-	if (!ptr)
-		return ;
-	header = (t_header *)(ptr - sizeof(t_header));
-	if (!header || !header->mem || !header->page)
+	if (!(header = check_before_free(ptr)))
 		return ;
 	prev = find_prev_header(header->page, header);
 	if (prev)

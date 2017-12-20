@@ -40,7 +40,8 @@ void			*init_new_page(t_page *pages, size_t size)
 		pages->next->init = (t_header *)(pages->next->mem);
 		pages->next->init->size = 0;
 		pages->next->init->page = pages->next;
-		pages->next->init->space = get_page_size(size) - sizeof(t_page) - sizeof(t_header);
+		pages->next->init->space = get_page_size(size) - sizeof(t_page) -
+		sizeof(t_header);
 		pages->next->init->mem = (void *)pages->next->init + sizeof(t_header);
 		pages->next->init->next = NULL;
 		return (pages);

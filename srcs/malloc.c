@@ -53,7 +53,8 @@ static t_header	*no_size_cond(t_page *pages, size_t size)
 		else
 			return (NULL);
 	}
-	else {
+	else
+	{
 		return (find_place(pages->next, size));
 	}
 }
