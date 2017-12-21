@@ -16,6 +16,8 @@ endif
 
 NAME =			libft_malloc_$(HOSTTYPE).so
 
+PATHLIB = 		/libft_malloc_$(HOSTTYPE).so
+
 LINK =			libft_malloc.so
 
 CC =			gcc
@@ -46,22 +48,23 @@ all: $(NAME)
 
 $(NAME): $(LIBFT) $(OBJ_PATHS)
 	$(CC) $(OBJ_PATHS) $(HEADERS) $(LIBRARIES) -shared -o $(NAME)
-	@/bin/rm -f $(LINK)
-	ln -s $(NAME) $(LINK)
+	@rm -f $(LINK)
+	ln -s $(addprefix $(shell pwd), $(PATHLIB)) $(LINK)
+	$(shell export LD_LIBRARY_PATH=./)
 
 $(OBJ_PATHS): $(OBJ_DIR)%.o: $(SRC_DIR)%.c
-	@/bin/mkdir -p $(OBJ_DIR)
+	@mkdir -p $(OBJ_DIR)
 	$(CC) -c $(FLAGS) $(HEADERS) $< -o $@
 
 $(LIBFT):
 	(cd $(LIBFT_DIR) && make)
 
 clean:
-	-/bin/rm -f $(OBJ_PATHS)
+	rm -f $(OBJ_PATHS)
 	(cd $(LIBFT_DIR) && make fclean)
-	/usr/bin/find . -name "$(OBJ_DIR_NAME)" -maxdepth 1 -type d -empty -delete
+	find . -name "$(OBJ_DIR_NAME)" -maxdepth 1 -type d -empty -delete
 
 fclean: clean
-	-/bin/rm -f $(NAME) $(LINK)
+	rm -f $(NAME) $(LINK)
 
 re: fclean all
