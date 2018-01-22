@@ -6,7 +6,7 @@
 /*   By: amoinier <amoinier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/21 12:07:41 by amoinier          #+#    #+#             */
-/*   Updated: 2017/11/22 15:22:54 by amoinier         ###   ########.fr       */
+/*   Updated: 2018/01/22 18:45:37 by amoinier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static t_header		*check_before_free(void *ptr)
 
 	if (!ptr)
 		return (NULL);
-	header = (t_header *)(ptr - sizeof(t_header));
+	header = find_ptr(ptr);
 	if (!header || !header->mem || !header->page)
 		return (NULL);
 	return (header);

@@ -6,7 +6,7 @@
 /*   By: amoinier <amoinier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/21 11:59:20 by amoinier          #+#    #+#             */
-/*   Updated: 2017/11/23 18:01:01 by amoinier         ###   ########.fr       */
+/*   Updated: 2018/01/22 18:47:25 by amoinier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,5 +52,6 @@ void				*alloc_mmap(size_t size);
 size_t				get_page_size(size_t size);
 int					get_page_type(size_t size);
 void				print_memory(const void *addr);
+t_header			*find_ptr(void *ptr);
 
 #endif

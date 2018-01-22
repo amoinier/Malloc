@@ -6,7 +6,7 @@
 /*   By: amoinier <amoinier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/21 12:06:54 by amoinier          #+#    #+#             */
-/*   Updated: 2017/11/23 19:11:31 by amoinier         ###   ########.fr       */
+/*   Updated: 2018/01/22 18:47:18 by amoinier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,9 +54,7 @@ static t_header	*no_size_cond(t_page *pages, size_t size)
 			return (NULL);
 	}
 	else
-	{
 		return (find_place(pages->next, size));
-	}
 }
 
 static t_header	*size_cond(t_page *pages, size_t size)
