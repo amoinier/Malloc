@@ -26,11 +26,9 @@ FLAGS =			-Wall -Werror -Wextra -fPIC
 
 HEADERS =		-I ./incs -I $(LIBFT_DIR)
 
-LIBRARIES =		-L$(LIBFT_DIR) -l$(LIBFT_NAME)
+LIBRARIES =		-L$(LIBFT_DIR) -lft
 
-LIBFT_NAME =	ft
-
-LIBFT =			$(LIBFT_DIR)lib$(LIBFT_NAME).a
+LIBFT =			$(LIBFT_DIR)libft.a
 
 LIBFT_DIR =		./libft/
 
@@ -68,3 +66,5 @@ fclean: clean
 	rm -f $(NAME) $(LINK)
 
 re: fclean all
+
+.PHONY: all $(NAME) $(OBJ_PATHS) $(LIBFT) clean fclean re
