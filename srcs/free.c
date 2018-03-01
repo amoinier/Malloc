@@ -6,7 +6,7 @@
 /*   By: amoinier <amoinier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/21 12:07:41 by amoinier          #+#    #+#             */
-/*   Updated: 2018/01/22 18:45:37 by amoinier         ###   ########.fr       */
+/*   Updated: 2018/03/01 14:24:01 by amoinier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,7 @@ void				free(void *ptr)
 
 	if (!(header = check_before_free(ptr)))
 		return ;
-	prev = find_prev_header(header->page, header);
-	if (prev)
+	if ((prev = find_prev_header(header->page, header)))
 	{
 		if (prev != header)
 		{
