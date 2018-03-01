@@ -6,7 +6,7 @@
 /*   By: amoinier <amoinier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/22 17:10:38 by amoinier          #+#    #+#             */
-/*   Updated: 2017/11/23 19:11:43 by amoinier         ###   ########.fr       */
+/*   Updated: 2018/03/01 18:23:49 by amoinier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void			init_new_block(t_page *page, t_header *header, size_t size)
 	t_header	*tmp;
 
 	tmp = header->next;
-	header->next = (t_header *)(header->mem + header->size);
+	header->next = (t_header *)((void *)header->mem + header->size);
 	header->next->mem = (void *)header->next + sizeof(t_header);
 	header->next->space = (!tmp ? header->space - sizeof(t_header) - size :
 	tmp->space);

@@ -6,7 +6,7 @@
 /*   By: amoinier <amoinier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/21 12:06:54 by amoinier          #+#    #+#             */
-/*   Updated: 2018/01/22 18:47:18 by amoinier         ###   ########.fr       */
+/*   Updated: 2018/03/01 19:17:55 by amoinier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,5 +111,5 @@ void			*malloc(size_t size)
 	if (page_type == -1)
 		return (NULL);
 	test = find_place(&g_pages_array[page_type], size);
-	return ((test ? test->mem : test));
+	return ((test ? test->mem : NULL));
 }

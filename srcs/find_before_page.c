@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   find_ptr.c                                         :+:      :+:    :+:   */
+/*   find_before_page.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: amoinier <amoinier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/22 16:43:22 by amoinier          #+#    #+#             */
-/*   Updated: 2018/03/01 19:17:09 by amoinier         ###   ########.fr       */
+/*   Updated: 2018/03/01 16:52:54 by amoinier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,50 +14,29 @@
 
 extern t_page g_pages_array[3];
 
-static t_header		*find_block(t_page *page, void *ptr)
+static t_page		*find_page(t_page *page, t_page *find)
 {
-	t_header	*tmp;
-	t_header	*head;
+	t_page			*tmp;
 
-	head = NULL;
-	tmp = page->init;
-	while (tmp && !head)
-	{
-		if (tmp->mem && tmp->mem == (void *)ptr)
-		{
-			head = (t_header *)(ptr - sizeof(t_header));
-		}
-		tmp = tmp->next;
-	}
-	return (head);
-}
-
-static t_header		*find_page(t_page *page, void *ptr)
-{
-	t_page		*tmp;
-	t_header	*head;
-
-	head = NULL;
 	tmp = page;
-	while (tmp && !head)
+	while (tmp && tmp->next != find)
 	{
-		head = find_block(tmp, ptr);
 		tmp = tmp->next;
 	}
-	return (head);
+	return (tmp);
 }
 
-t_header			*find_ptr(void *ptr)
+t_page				*find_before_page(t_page *page)
 {
-	int			i;
-	t_header	*head;
+	int				i;
+	t_page			*tmp;
 
-	head = NULL;
 	i = 0;
-	while (i < 3 && !head)
+	tmp = NULL;
+	while (i < 3 && !tmp)
 	{
-		head = find_page(&g_pages_array[i], ptr);
+		tmp = find_page(&g_pages_array[i], page);
 		i++;
 	}
-	return (head);
+	return (tmp);
 }

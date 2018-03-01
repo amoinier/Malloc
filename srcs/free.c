@@ -6,7 +6,7 @@
 /*   By: amoinier <amoinier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/21 12:07:41 by amoinier          #+#    #+#             */
-/*   Updated: 2018/03/01 14:24:01 by amoinier         ###   ########.fr       */
+/*   Updated: 2018/03/01 19:11:31 by amoinier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,27 @@ static t_header		*check_before_free(void *ptr)
 	return (header);
 }
 
+static void			delete_empty_page(t_page *page)
+{
+	t_header		*tmp;
+	t_page			*to_delete;
+	t_page			*save;
+
+	tmp = page->init;
+	while (tmp && tmp->size == 0)
+		tmp = tmp->next;
+	if (!tmp)
+	{
+		to_delete = find_before_page(page);
+		if (to_delete && to_delete->next)
+		{
+			save = to_delete->next->next;
+			munmap(to_delete->next, to_delete->next->max_space_size);
+			to_delete->next = save;
+		}
+	}
+}
+
 void				free(void *ptr)
 {
 	t_header		*header;
@@ -59,6 +80,7 @@ void				free(void *ptr)
 			header->page->max_space_size += header->size;
 			ft_bzero(header->mem, header->size);
 			header->size = 0;
+			delete_empty_page(prev->page);
 		}
 	}
 	return ;
