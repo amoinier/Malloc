@@ -6,7 +6,7 @@
 /*   By: amoinier <amoinier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/21 11:59:20 by amoinier          #+#    #+#             */
-/*   Updated: 2018/03/01 16:08:03 by amoinier         ###   ########.fr       */
+/*   Updated: 2018/03/02 15:21:03 by amoinier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@
 
 # define BLOCK_NBR 	100
 
-# define TINY 	(getpagesize() * 2) - sizeof(t_page)
-# define SMALL 	(getpagesize() * 4) - sizeof(t_page)
+# define TINY 	(getpagesize() * 15) - sizeof(t_page)
+# define SMALL 	(getpagesize() * 30) - sizeof(t_page)
 
 # define TINY_SIZE 	(TINY - (sizeof(t_header) * BLOCK_NBR)) / BLOCK_NBR
 # define SMALL_SIZE 	(SMALL - (sizeof(t_header) * BLOCK_NBR)) / BLOCK_NBR

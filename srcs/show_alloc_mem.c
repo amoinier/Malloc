@@ -6,7 +6,7 @@
 /*   By: amoinier <amoinier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/21 12:07:41 by amoinier          #+#    #+#             */
-/*   Updated: 2017/11/22 15:22:54 by amoinier         ###   ########.fr       */
+/*   Updated: 2018/03/02 15:55:53 by amoinier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,16 +30,19 @@ static unsigned int	second_loop(t_page *tmp_page, unsigned int total, int j)
 	t_header		*tmp_header;
 
 	tmp_header = tmp_page->init;
-	ft_putstr("*** PAGE ");
-	ft_putnbr(j);
-	ft_putstr(" ***\n");
-	while (tmp_header)
+	if (tmp_header)
 	{
-		print_header(tmp_header);
-		total += tmp_header->size;
-		tmp_header = tmp_header->next;
+		ft_putstr("*** PAGE ");
+		ft_putnbr(j);
+		ft_putstr(" ***\n");
+		while (tmp_header)
+		{
+			print_header(tmp_header);
+			total += tmp_header->size;
+			tmp_header = tmp_header->next;
+		}
+		ft_putstr("**************\n");
 	}
-	ft_putstr("**************\n");
 	return (total);
 }
 

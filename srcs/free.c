@@ -6,7 +6,7 @@
 /*   By: amoinier <amoinier@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/21 12:07:41 by amoinier          #+#    #+#             */
-/*   Updated: 2018/03/01 19:11:31 by amoinier         ###   ########.fr       */
+/*   Updated: 2018/03/02 16:23:44 by amoinier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,18 @@ static void			delete_empty_page(t_page *page)
 	}
 }
 
+static void			header_with_prev(t_header *prev, t_header *header)
+{
+	prev->space = prev->space + (sizeof(t_header) + header->size +
+	header->space);
+	header->page->max_space_size = (header->page->max_space_size <
+	prev->space ? prev->space : header->page->max_space_size);
+	prev->next = header->next;
+	ft_bzero(header, sizeof(t_header) + header->size);
+	header->size = 0;
+	delete_empty_page(prev->page);
+}
+
 void				free(void *ptr)
 {
 	t_header		*header;
@@ -68,16 +80,13 @@ void				free(void *ptr)
 	{
 		if (prev != header)
 		{
-			prev->next = header->next;
-			prev->space += sizeof(t_header) + header->size + header->space;
-			header->page->max_space_size = (header->page->max_space_size <
-			prev->space ? prev->space : header->page->max_space_size);
-			ft_bzero(header, sizeof(t_header) + header->size);
+			header_with_prev(prev, header);
 		}
 		else
 		{
 			header->space += header->size;
 			header->page->max_space_size += header->size;
+			header->page->init = header->next;
 			ft_bzero(header->mem, header->size);
 			header->size = 0;
 			delete_empty_page(prev->page);
